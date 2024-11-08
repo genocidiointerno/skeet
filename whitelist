@@ -2,7 +2,7 @@ local withoutwhitelist = {
     5579418428, -- // withoutZlv
     4530162569, -- // withoutrodezuu
 }
-if not table.find(whitelist,game.Players.LocalPlayer.UserId) then
+if not table.find(withoutwhitelist.game.Players.LocalPlayer.UserId) then
     local player = game.Players.LocalPlayer
     player:Kick("pedi whitelist en discord.gg/guija")
     else
