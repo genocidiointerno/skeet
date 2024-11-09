@@ -16,7 +16,7 @@ function introware()
     Image.BackgroundTransparency = 1
     Image.Position = UDim2.new(0, newx, 0, newy)
     Image.Size = UDim2.new(0.6, 0, 0.6, 0)
-    Image.Image = "rbxassetid://124535391771240" --- Id de la imagen deseada
+    Image.Image = "rbxassetid://110967630532892"
     Image.ImageTransparency = 1
     Image.AnchorPoint = Vector2.new(0.5,0.5)
 
