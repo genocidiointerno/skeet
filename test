@@ -1,0 +1,228 @@
+getgenv().withoutcommands = {
+    ChatCommands = {
+        Enabled = true, -- // lifehack escribi /c system para ocultar los comandos
+        Prefix = ".", -- // Prefijo para usar los comandos
+        Commands = { -- // NO PUEDEN TENER ESPACIOOOOOOOS
+            GotoLocation = "tp", -- // ejemp; /tp (Lugar) \\ Si queres saber los lugares disponibles recomiendo usar /help
+            Rejoin = "rj", -- // por si queres rejoinear
+            Help = "commands",
+        }
+    }
+}
+
+game.Players.LocalPlayer.Chatted:Connect(function (msg)
+	local function invalidargs(msg)
+		warn("'"..tostring(msg).."' is not a valid argument. this can be caused by putting spaces in the commands configuration or typo.")
+	end
+	local function unsupportgame()
+		notify("This command is not supported in this game.")
+	end
+	local text = msg:split(' ')
+	if withoutcommands.ChatCommands.Enabled then
+		if string.lower(text[1]) == string.lower(withoutcommands.ChatCommands.Prefix..withoutcommands.ChatCommands.Commands.GotoLocation) then
+			if game.PlaceId == 6441847031 then
+				local v = string.lower(text[2])
+				if v == "beach" then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(155, 61, 83)
+				elseif v == "house" then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-179, 63, -34)
+				elseif v == "tower1" then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(53, 113, -36)
+				elseif v == "tower2" then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(61, 114, 189)
+				elseif v == "tower3" then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-434, 87, -17)
+				elseif v == "center2" then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-283, 60, 196)
+				elseif v == "center" then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-98, 66, 101)
+				end
+			end
+		end
+	end
+	if string.lower(text[1]) == string.lower(withoutcommands.ChatCommands.Prefix..withoutcommands.ChatCommands.Commands.Rejoin) then
+        local ts = game:GetService("TeleportService")
+        local p = game:GetService("Players").LocalPlayer
+        ts:Teleport(game.PlaceId, p)
+	end
+	if string.lower(text[1]) == string.lower(withoutcommands.ChatCommands.Prefix..withoutcommands.ChatCommands.Commands.Help) then
+		print("tower1")
+		print("tower2")
+		print("tower3")
+		print("center")
+		print("center2")
+		print("beach")
+		print("house")
+	end
+end)
+
+--- Notificacion
+
+local LinoriaNotifs = loadstring(game:HttpGet("https://raw.githubusercontent.com/ZlvXs/backups/refs/heads/main/linotify.lua"))()
+getgenv().WatermarkColor = Color3.fromRGB(134,255,146)
+
+--- Assets
+loadstring(game:HttpGet('https://raw.githubusercontent.com/genocidiointerno/skeet/refs/heads/main/intro'))()
+
+
+
+LinoriaNotifs:Notify("Cargando, esto podra tardar unos segundos", 3)
+loadstring(game:HttpGet('https://raw.githubusercontent.com/ZlvXs/backups/refs/heads/main/assets.lua'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/ZlvXs/backups/refs/heads/main/x.lua'))()
+
+--- Script
+
+local repo = 'https://raw.githubusercontent.com/ZlvXs/LinoriaLib/main/'
+local Library = loadstring(game:HttpGet(repo .. 'Library.lua'))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+local Window = Library:CreateWindow({
+    Title = 'withoutware.lua',
+    Center = true,
+    AutoShow = true,
+    TabPadding = 8,
+    MenuFadeTime = 0.2
+})
+
+local Tabs = {
+    Main = Window:AddTab('Principal'),
+    Main2 = Window:AddTab('Visuales'),
+    Main3 = Window:AddTab('Settings'),
+    Main4 = Window:AddTab('inject'),
+}
+
+local HitpartTable = {"Head", "HumanoidRootPart", "Left Arm", "Right Arm", "Right Leg", "Left Leg"}
+
+local function KeyCodeToString(keycode)
+    return game:GetService("UserInputService"):GetStringForKeyCode(keycode) 
+end
+
+local aim_izquierda = Tabs.Main:AddLeftGroupbox('Aim-Assist')
+
+aim_izquierda:AddToggle('AimToggle', {
+    Text = 'Activar',
+    Default = withoutware["Cam Lock"].Enabled, 
+    Callback = function(Value)
+        withoutware["Cam Lock"].Enabled = Value
+    end
+}):AddKeyPicker('AimBind', {
+    Default = withoutware["Cam Lock"]["Target Mode Bind"],
+    SyncToggleState = false,
+
+    Mode = 'Always',
+
+    Text = 'Aim-Assist',
+    NoUI = false, 
+    ChangedCallback = function(New)
+        withoutware["Cam Lock"]["Target Mode Bind"] = KeyCodeToString(New)
+    end
+})
+
+aim_izquierda:AddToggle('AimFov', {
+    Text = 'Fov',
+    Default = withoutware["FOV"]["Cam Lock"].Visible ,  
+    Callback = function(Value)
+        withoutware["FOV"]["Cam Lock"].Visible = Value
+    end
+}):AddColorPicker('AimFovColor', {
+    Default = withoutware["FOV"]["Cam Lock"].Color,
+    Title = 'Color del Circulo',
+    Transparency = nil,
+
+    Callback = function(Value)
+        withoutware["FOV"]["Cam Lock"].Color = Value
+    end
+})
+
+aim_izquierda:AddSlider('AimFovSize', {
+    Text = 'Tamaño',
+    Default = withoutware["FOV"]["Cam Lock"].Size,
+    Min = 1,
+    Max = 100,
+    Rounding = 1,
+    Compact = true,
+
+    Callback = function(Value)
+        withoutware["FOV"]["Cam Lock"].Size = Value
+    end
+})
+
+aim_izquierda:AddDropdown('AimLockPart', {
+    Values = HitpartTable,
+    Default = withoutware["Cam Lock"]["Target Part"],
+    Multi = false,
+
+    Text = 'Parte Lockeada',
+
+    Callback = function(Value)
+        withoutware["Cam Lock"]["Target Part"] = Value
+    end
+})
+
+local select_izquierda = Tabs.Main:AddRightGroupbox('Auto-Select')
+
+local Pressing = false
+select_izquierda:AddToggle('AutoSelectToggle', {Text = 'Activar', Default = true}):OnChanged(function()
+    local stopFlag = false
+    local function pressKey()
+        wait(.5)  
+        game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.KeypadSeven, false, game)
+    end
+
+    if Pressing then
+        Pressing = false
+        stopFlag = true
+    else
+        Pressing = true
+        stopFlag = false
+        spawn(function()
+            repeat
+                pressKey()
+                wait(1)
+                game:GetService("RunService").Heartbeat:Wait()
+            until stopFlag or not Pressing
+        end)
+    end
+end)
+
+select_izquierda:AddDropdown('AutoSelectWeapon', {Values = {"Mace","Chainsaw","Knife","Pan","Pencil","Baseball Bat","Scythe", "Emerald Greatsword","Blood Dagger","Frost Spear","Pink Hammer","Steel Sword","Katana","Holloween Dagger"},Default = 8,Multi = false,Text = 'Selecciona un arma'}):OnChanged(function(weapon)
+    local Mouse = game.Players.LocalPlayer:GetMouse()
+    game:GetService("UserInputService").InputBegan:Connect(function(Input, IsTyping)
+    if IsTyping then return end
+    if Input.KeyCode == Enum.KeyCode.KeypadSeven then
+        local Player = game:GetService("Players").LocalPlayer
+        local Mouse = Player:GetMouse()
+        game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Menu Screen").Enabled = false
+        Player.PlayerGui["Menu Screen"].RemoteEvent:FireServer(weapon)
+        wait(1) end
+    end)
+end)
+
+local principales_derecha = Tabs.Main:AddRightGroupbox('Extras')
+
+local detection_derecha = Tabs.Main:AddRightGroupbox('Hit-Detection')
+
+local cframe_izquierda = Tabs.Main:AddLeftGroupbox('C-Frame')
+
+local spinbot_derecha = Tabs.Main:AddRightGroupbox('Spin-Bot')
+
+local fly_izquierda = Tabs.Main:AddLeftGroupbox('Fly')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+local cmd_izquierda = Tabs.Main4:AddLeftGroupbox('commands')
+LeftGroupBox:AddLabel('/help')
+
