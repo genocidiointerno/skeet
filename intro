@@ -1,3 +1,5 @@
+-- intro actualizada
+
 function introware()
     local cam = workspace.CurrentCamera
     local x = cam.ViewportSize.X
